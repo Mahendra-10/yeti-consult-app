@@ -111,9 +111,9 @@ jobs:
 
       - name: Build and test Docker image
         run: |
-          cd mobile
           docker build -t yeti-consult-app:test .
           docker run --rm yeti-consult-app:test npm test -- --passWithNoTests || true
+        working-directory: ./mobile
 
 # Security Best Practices:
 # - Store all secrets (API keys, tokens) in GitHub repository secrets, not in code or .env files.
