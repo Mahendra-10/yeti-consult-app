@@ -27,11 +27,14 @@ Add these secrets in your GitHub repository (Settings → Secrets and variables 
 
 | Secret Name | Description | Required |
 |-------------|-------------|----------|
-| `EXPO_TOKEN` | Expo access token for EAS builds | Yes (for builds) |
-| `FIREBASE_SERVICE_ACCOUNT` | Firebase service account JSON | Yes (if using Firebase) |
-| `FIREBASE_API_KEY` | Firebase API key | Yes (if using Firebase) |
-| `FIREBASE_AUTH_DOMAIN` | Firebase auth domain | Yes (if using Firebase) |
-| `FIREBASE_PROJECT_ID` | Firebase project ID | Yes (if using Firebase) |
+| `FIREBASE_API_KEY` | Firebase API key | Yes (for production builds) |
+| `FIREBASE_AUTH_DOMAIN` | Firebase auth domain | Yes (for production builds) |
+| `FIREBASE_PROJECT_ID` | Firebase project ID | Yes (for production builds) |
+| `FIREBASE_STORAGE_BUCKET` | Firebase storage bucket | Yes (for production builds) |
+| `FIREBASE_MESSAGING_SENDER_ID` | Firebase messaging sender ID | Yes (for production builds) |
+| `FIREBASE_APP_ID` | Firebase app ID | Yes (for production builds) |
+
+**Note**: `EXPO_TOKEN` will be added later when you're ready for mobile app builds.
 
 ### How to Add Secrets
 

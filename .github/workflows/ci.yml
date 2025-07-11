@@ -7,7 +7,13 @@ on:
     branches: [main, develop]
 
 env:
-  EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+  # Firebase environment variables for builds
+  EXPO_PUBLIC_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+  EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+  EXPO_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+  EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+  EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+  EXPO_PUBLIC_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
 
 jobs:
   build-and-test:
@@ -46,15 +52,7 @@ jobs:
         working-directory: ./mobile
         continue-on-error: true
 
-      - name: Install EAS CLI
-        run: npm install -g @expo/eas-cli
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
-
-      - name: EAS Build (Preview)
-        run: eas build --platform all --profile preview --non-interactive
-        working-directory: ./mobile
-        if: github.ref == 'refs/heads/develop' && env.EXPO_TOKEN != ''
-        continue-on-error: true
+      # Note: EAS builds removed - add EXPO_TOKEN later when ready for mobile builds
 
   security-audit:
     runs-on: ubuntu-latest
@@ -122,4 +120,5 @@ jobs:
 # - Never echo or print secrets in logs.
 # - Use branch protection rules to require passing checks before merging.
 # - Review audit and CodeQL results regularly.
-# - EAS_TOKEN should be added to GitHub secrets for EAS builds. 
+# - Firebase environment variables should be added to GitHub secrets for builds.
+# - Add EXPO_TOKEN later when ready for mobile app builds. 
