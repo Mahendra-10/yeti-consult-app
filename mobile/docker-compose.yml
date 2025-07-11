@@ -1,0 +1,55 @@
+
+services:
+  # Main development service for your Yeti-Consult app
+  yeti-consult-dev:
+    # Build the image from the Dockerfile in the current directory
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Map container port 8081 to host port 8081
+    # This allows you to access your app at localhost:8081
+    ports:
+      - "8081:8081"
+      - "19000:19000"  # Expo DevTools port
+      - "19001:19001"  # Expo tunnel port
+      - "19002:19002"  # Expo tunnel port
+    # Mount your local code into the container
+    # This enables hot reloading - changes to your code are reflected immediately
+    volumes:
+      - .:/app
+      # Exclude node_modules from volume mount to use container's version
+      - /app/node_modules
+    # Environment variables for development
+    environment:
+      - NODE_ENV=development
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - EXPO_TUNNEL_SUBDOMAIN=yeti-consult
+    # Keep container running and restart if it crashes
+    restart: unless-stopped
+    # Give the service a friendly name
+    container_name: yeti-consult-development
+    # Enable interactive mode for better logging
+    stdin_open: true
+    tty: true
+
+  # Optional: Firebase emulator service for local development
+  firebase-emulator:
+    # Use a Node.js image for Firebase emulator
+    image: node:18-alpine
+    # Install Firebase CLI
+    command: >
+      sh -c "npm install -g firebase-tools &&
+              firebase emulators:start --project demo-yeti-consult"
+    # Map Firebase emulator ports
+    ports:
+      - "4000:4000"  # Firebase Hosting emulator
+      - "9099:9099"  # Firebase Firestore emulator
+      - "5001:5001"  # Firebase Functions emulator
+      - "8080:8080"  # Firebase Auth emulator
+    # Environment for Firebase emulator
+    environment:
+      - FIRESTORE_EMULATOR_HOST=0.0.0.0:9099
+      - FIREBASE_AUTH_EMULATOR_HOST=0.0.0.0:8080
+    # Only start if you need Firebase emulator
+    profiles:
+      - firebase 

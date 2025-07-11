@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Production web service for your Yeti-Consult app
+  yeti-consult-prod:
+    # Build using the production Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      target: production  # Use the production stage from multi-stage build
+    # Map container port 80 to host port 3000
+    # This allows you to access your app at localhost:3000
+    ports:
+      - "3000:80"
+    # Environment variables for production
+    environment:
+      - NODE_ENV=production
+    # Restart policy for production
+    restart: unless-stopped
+    # Container name
+    container_name: yeti-consult-production
+    # Health check to ensure the service is running
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Nginx reverse proxy for multiple services
+  nginx-proxy:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-proxy.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - yeti-consult-prod
+    restart: unless-stopped
+    profiles:
+      - proxy 
